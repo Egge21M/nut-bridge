@@ -20,5 +20,8 @@ export async function createInvoiceAndHandlePayment(amount: number) {
     await publishNutZap(proofs);
     sub.cancel();
   });
+  sub.on("expired", () => {
+    sub.cancel();
+  });
   return request;
 }
