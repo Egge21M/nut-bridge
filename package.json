@@ -12,9 +12,11 @@
   "description": "",
   "dependencies": {
     "@cashu/cashu-ts": "^2.2.2",
-    "almnd": "^0.1.0",
+    "@noble/curves": "^1.8.1",
+    "almnd": "^0.1.1",
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "nostr-tools": "^2.11.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
