@@ -6,14 +6,7 @@ import {
   generateSecretKey,
   SimplePool,
 } from "nostr-tools";
-import { NOSTR_HEX_PUBKEY } from "./config";
-
-const defaultRelays = [
-  "wss://relay.primal.net",
-  "wss://relay.damus.io",
-  "wss://relay.f7z.io",
-  "wss://nos.lol",
-];
+import { DEFAULT_RELAYS, NOSTR_HEX_PUBKEY } from "./config";
 
 const pool = new SimplePool();
 
@@ -40,7 +33,7 @@ export async function getWalletInfoEvent() {
   return new Promise<Event>((res, rej) => {
     const allEvents: Event[] = [];
     pool.subscribeMany(
-      defaultRelays,
+      DEFAULT_RELAYS,
       [
         {
           kinds: [10019],
@@ -79,6 +72,6 @@ export async function publishNutZap(proofs: Proof[]) {
   };
   const event = finalizeEvent(eventTemplate, sk);
   console.log("Publish nutzap event", event);
-  const pub = pool.publish(defaultRelays, event);
+  const pub = pool.publish(DEFAULT_RELAYS, event);
   return Promise.any(pub);
 }

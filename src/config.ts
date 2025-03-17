@@ -7,3 +7,10 @@ export const NOSTR_HEX_PUBKEY =
 
 export const MIN_AMOUNT = 1000;
 export const MAX_AMOUNT = 10000;
+
+export const DEFAULT_RELAYS = [
+  "wss://relay.primal.net",
+  "wss://relay.damus.io",
+  "wss://relay.f7z.io",
+  "wss://nos.lol",
+];
