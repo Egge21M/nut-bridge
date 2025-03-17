@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@cashu/cashu-ts": "^2.2.2",
+    "almnd": "^0.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   },
