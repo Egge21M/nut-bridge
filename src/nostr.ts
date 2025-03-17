@@ -1,11 +1,5 @@
 import { Proof } from "@cashu/cashu-ts";
-import {
-  Event,
-  EventTemplate,
-  finalizeEvent,
-  generateSecretKey,
-  SimplePool,
-} from "nostr-tools";
+import { Event, EventTemplate, finalizeEvent, SimplePool } from "nostr-tools";
 import { DEFAULT_RELAYS, NOSTR_HEX_PUBKEY, SERVER_SECRET_KEY } from "./config";
 
 const pool = new SimplePool();
@@ -15,7 +9,6 @@ class NutWalletManager {
 
   async init() {
     const walletEvent = await getWalletInfoEvent();
-    console.log(walletEvent);
     const pubkeyTag = walletEvent.tags.find((t) => t[0] === "pubkey");
     if (!pubkeyTag || typeof pubkeyTag[1] !== "string") {
       return "02" + walletEvent.pubkey;
@@ -43,7 +36,6 @@ export async function getWalletInfoEvent() {
 
       {
         onevent: (e) => {
-          console.log(e);
           allEvents.push(e);
         },
         oneose: () => {
