@@ -6,6 +6,7 @@ import {
   generateSecretKey,
   SimplePool,
 } from "nostr-tools";
+import { NOSTR_HEX_PUBKEY } from "./config";
 
 const defaultRelays = [
   "wss://relay.primal.net",
@@ -43,9 +44,7 @@ export async function getWalletInfoEvent() {
       [
         {
           kinds: [10019],
-          authors: [
-            "0a2f6049f3f237f71baf0ec90b2cd2b5ce52621adaba03fa9b84b212ed56022d",
-          ],
+          authors: [NOSTR_HEX_PUBKEY],
         },
       ],
 
@@ -74,7 +73,7 @@ export async function publishNutZap(proofs: Proof[]) {
     created_at: Math.floor(Date.now() / 1000),
     tags: [
       ...proofTags,
-      ["p", "0a2f6049f3f237f71baf0ec90b2cd2b5ce52621adaba03fa9b84b212ed56022d"],
+      ["p", NOSTR_HEX_PUBKEY],
       ["u", "https://mint.minibits.cash/Bitcoin"],
     ],
   };
