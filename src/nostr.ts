@@ -6,7 +6,7 @@ import {
   generateSecretKey,
   SimplePool,
 } from "nostr-tools";
-import { DEFAULT_RELAYS, NOSTR_HEX_PUBKEY } from "./config";
+import { DEFAULT_RELAYS, NOSTR_HEX_PUBKEY, SERVER_SECRET_KEY } from "./config";
 
 const pool = new SimplePool();
 
@@ -59,7 +59,6 @@ export async function getWalletInfoEvent() {
 
 export async function publishNutZap(proofs: Proof[]) {
   const proofTags = proofs.map((p) => ["proof", JSON.stringify(p)]);
-  const sk = generateSecretKey();
   const eventTemplate: EventTemplate = {
     kind: 9321,
     content: "Forwarded nut-bridge zap!",
@@ -70,8 +69,7 @@ export async function publishNutZap(proofs: Proof[]) {
       ["u", "https://mint.minibits.cash/Bitcoin"],
     ],
   };
-  const event = finalizeEvent(eventTemplate, sk);
-  console.log("Publish nutzap event", event);
+  const event = finalizeEvent(eventTemplate, SERVER_SECRET_KEY);
   const pub = pool.publish(DEFAULT_RELAYS, event);
   return Promise.any(pub);
 }

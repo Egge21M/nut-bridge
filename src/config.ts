@@ -1,3 +1,5 @@
+import { generateSecretKey } from "nostr-tools";
+
 export const USERNAME = "egge";
 export const HOSTNAME = "https://test.test";
 export const MINT_URL = "https://mint.minibits.cash/Bitcoin";
@@ -14,3 +16,5 @@ export const DEFAULT_RELAYS = [
   "wss://relay.f7z.io",
   "wss://nos.lol",
 ];
+
+export const SERVER_SECRET_KEY = generateSecretKey();
