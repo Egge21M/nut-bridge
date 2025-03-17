@@ -1,7 +1,8 @@
 import { generateSecretKey } from "nostr-tools";
 
 export const USERNAME = "egge";
-export const HOSTNAME = "https://test.test";
+export const PORT = process.env.PORT || 8080;
+export const HOSTNAME = "https://nutzap.cash";
 export const MINT_URL = "https://mint.minibits.cash/Bitcoin";
 
 export const NOSTR_HEX_PUBKEY =
