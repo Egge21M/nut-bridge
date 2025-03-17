@@ -49,11 +49,11 @@ export async function getWalletInfoEvent() {
   });
 }
 
-export async function publishNutZap(proofs: Proof[]) {
+export async function publishNutZap(proofs: Proof[], comment?: string) {
   const proofTags = proofs.map((p) => ["proof", JSON.stringify(p)]);
   const eventTemplate: EventTemplate = {
     kind: 9321,
-    content: "Forwarded nut-bridge zap!",
+    content: comment || "Forwarded nut-bridge zap!",
     created_at: Math.floor(Date.now() / 1000),
     tags: [
       ...proofTags,

@@ -3,7 +3,12 @@ import { createLnurlResponse, isValidAmount } from "./utils";
 import { createInvoiceAndHandlePayment } from "./wallet";
 
 export const lud16Controller = async (
-  req: Request<unknown, unknown, unknown, { amount: string }>,
+  req: Request<
+    unknown,
+    unknown,
+    unknown,
+    { amount?: string; comment?: string }
+  >,
   res: Response,
   next: NextFunction,
 ) => {
@@ -17,7 +22,10 @@ export const lud16Controller = async (
     if (!isValid) {
       throw new Error("Invalid Amount");
     }
-    const invoice = await createInvoiceAndHandlePayment(parsedAmount / 1000);
+    const invoice = await createInvoiceAndHandlePayment(
+      parsedAmount / 1000,
+      req.query.comment,
+    );
     res.json({
       pr: invoice,
       routes: [],

@@ -5,6 +5,7 @@ export function createLnurlResponse() {
     callback: `${HOSTNAME}/.well-known/lnurlp/${USERNAME}`,
     maxSendable: MAX_AMOUNT,
     minSendable: MIN_AMOUNT,
+    commentAllowed: 256,
     metadata: JSON.stringify([
       ["text/plain", "A cashu lightning address... Neat!"],
     ]),

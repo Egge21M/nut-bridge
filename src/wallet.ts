@@ -10,14 +10,17 @@ const mintComm = new MintCommunicator(MINT_URL, {
 
 const wallet = new CashuWallet(new CashuMint(MINT_URL));
 
-export async function createInvoiceAndHandlePayment(amount: number) {
+export async function createInvoiceAndHandlePayment(
+  amount: number,
+  comment?: string,
+) {
   const { quote, request } = await mintComm.getMintQuote(amount);
   const sub = mintComm.pollForMintQuote(quote);
   sub.on("paid", async () => {
     const proofs = await wallet.mintProofs(amount, quote, {
       p2pk: { pubkey: nutWalletManager.pubkey! },
     });
-    await publishNutZap(proofs);
+    await publishNutZap(proofs, comment);
     sub.cancel();
   });
   sub.on("expired", () => {
