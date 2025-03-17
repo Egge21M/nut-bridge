@@ -1,28 +1,23 @@
-import {
-  CashuMint,
-  CashuWallet,
-  getEncodedToken,
-  MintQuoteState,
-  Proof,
-} from "@cashu/cashu-ts";
+import { getEncodedToken, Proof } from "@cashu/cashu-ts";
 import { MINT_URL } from "./config";
 import { resolve } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { MintCommunicator } from "almnd";
 
-const mint = new CashuMint(MINT_URL);
-const wallet = new CashuWallet(mint);
+const mintComm = new MintCommunicator(MINT_URL, {
+  initialPollingTimeout: { mint: 10000, melt: 10000, proof: 10000 },
+  backoffFunction: (r) => 5000 * Math.pow(2, r),
+});
 
 export async function createInvoiceAndHandlePayment(amount: number) {
-  const { quote, request } = await wallet.createMintQuote(amount);
-  const interval = setInterval(async () => {
-    const stateRes = await wallet.checkMintQuote(quote);
-    if (stateRes.state === "PAID") {
-      const proofs = await wallet.mintProofs(amount, quote);
-      clearInterval(interval);
-      const token = turnProofsIntoToken(proofs);
-      saveTokenLocally(token);
-    }
-  }, 10000);
+  const { quote, request } = await mintComm.getMintQuote(amount);
+  const sub = mintComm.pollForMintQuote(quote);
+  sub.on("paid", async (r) => {
+    const proofs = await mintComm.getProofs(amount, r);
+    const token = turnProofsIntoToken(proofs);
+    console.log(token);
+    sub.cancel();
+  });
   return request;
 }
 
