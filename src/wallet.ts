@@ -1,12 +1,5 @@
-import {
-  CashuMint,
-  CashuWallet,
-  getEncodedToken,
-  Proof,
-} from "@cashu/cashu-ts";
+import { CashuMint, CashuWallet } from "@cashu/cashu-ts";
 import { MINT_URL } from "./config";
-import { resolve } from "path";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { MintCommunicator } from "almnd";
 import { nutWalletManager, publishNutZap } from "./nostr";
 
@@ -28,16 +21,4 @@ export async function createInvoiceAndHandlePayment(amount: number) {
     sub.cancel();
   });
   return request;
-}
-
-function turnProofsIntoToken(proofs: Proof[]) {
-  return getEncodedToken({ mint: MINT_URL, proofs });
-}
-
-function saveTokenLocally(token: string) {
-  const tokenDirPath = resolve(__dirname, "../token");
-  if (!existsSync(tokenDirPath)) {
-    mkdirSync(tokenDirPath);
-  }
-  writeFileSync(resolve(tokenDirPath, `${Date.now()}_token.txt`), token);
 }
