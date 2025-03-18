@@ -35,7 +35,15 @@ export async function createInvoiceAndHandlePayment(
         request,
         zapRequestObject.event,
       );
-      await publishZapReceipt(zapReceipt);
+      console.log("Created Zap Receipt: ", JSON.stringify(zapReceipt));
+      const pubs = await publishZapReceipt(zapReceipt);
+      pubs.forEach((p) => {
+        if (p.status === "rejected") {
+          console.log("Publishing zap receipt failed: ", p.reason);
+        } else {
+          console.log("Publishing zap receipt succeeded: ", p.value);
+        }
+      });
     }
     sub.cancel();
   });
