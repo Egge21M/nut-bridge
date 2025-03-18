@@ -18,5 +18,7 @@ export const DEFAULT_RELAYS = [
   "wss://nos.lol",
 ];
 
-export const SERVER_SECRET_KEY = generateSecretKey();
+export const SERVER_SECRET_KEY = process.env.SERVER_SECRET_HEX_KEY
+  ? Buffer.from(process.env.SERVER_SECRET_HEX_KEY, "hex")
+  : generateSecretKey();
 export const SERVER_PUBLIC_KEY = getPublicKey(SERVER_SECRET_KEY);
