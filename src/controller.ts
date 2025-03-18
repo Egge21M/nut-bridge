@@ -32,9 +32,8 @@ export const lud16Controller = async (
       try {
         zapRequestData = parseAndValidateZapRequest(nostr, parsedAmount);
       } catch (e) {
-        return res
-          .status(400)
-          .json({ error: true, message: "Invalid zap request" });
+        res.status(400).json({ error: true, message: "Invalid zap request" });
+        return;
       }
     }
     const invoice = await createInvoiceAndHandlePayment(
