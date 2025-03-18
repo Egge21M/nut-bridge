@@ -1,7 +1,14 @@
 import { CashuMint, CashuWallet } from "@cashu/cashu-ts";
 import { MINT_URL } from "./config";
 import { MintCommunicator } from "almnd";
-import { nutWalletManager, publishNutZap } from "./nostr";
+import {
+  createZapReceipt,
+  nutWalletManager,
+  publishNutZap,
+  publishZapReceipt,
+  VerifiedZapRequestData,
+} from "./nostr";
+import { Event } from "nostr-tools";
 
 const mintComm = new MintCommunicator(MINT_URL, {
   initialPollingTimeout: { mint: 10000, melt: 10000, proof: 10000 },
@@ -13,6 +20,7 @@ const wallet = new CashuWallet(new CashuMint(MINT_URL));
 export async function createInvoiceAndHandlePayment(
   amount: number,
   comment?: string,
+  zapRequestObject?: { data: VerifiedZapRequestData; event: Event },
 ) {
   const { quote, request } = await mintComm.getMintQuote(amount);
   const sub = mintComm.pollForMintQuote(quote);
@@ -20,7 +28,15 @@ export async function createInvoiceAndHandlePayment(
     const proofs = await wallet.mintProofs(amount, quote, {
       p2pk: { pubkey: nutWalletManager.pubkey! },
     });
-    await publishNutZap(proofs, comment);
+    await publishNutZap(proofs, zapRequestObject?.data.content || comment);
+    if (zapRequestObject) {
+      const zapReceipt = createZapReceipt(
+        zapRequestObject.data,
+        request,
+        zapRequestObject.event,
+      );
+      await publishZapReceipt(zapReceipt);
+    }
     sub.cancel();
   });
   sub.on("expired", () => {

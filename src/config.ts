@@ -1,4 +1,4 @@
-import { generateSecretKey } from "nostr-tools";
+import { generateSecretKey, getPublicKey } from "nostr-tools";
 
 export const USERNAME = "egge";
 export const PORT = process.env.PORT || 8080;
@@ -19,3 +19,4 @@ export const DEFAULT_RELAYS = [
 ];
 
 export const SERVER_SECRET_KEY = generateSecretKey();
+export const SERVER_PUBLIC_KEY = getPublicKey(SERVER_SECRET_KEY);
